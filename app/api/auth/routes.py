@@ -10,9 +10,10 @@ from app.api.auth.services.authSetup import (
 )
 from app.api.auth.services.user_login import user_login_
 from app.api.auth.services.user_register import user_register_
+from app.common.schemas import ValidationErrorLoggingRoute
 from app.dependencies import db_session
 
-router = APIRouter()
+router =  APIRouter(route_class=ValidationErrorLoggingRoute)
 
 prefix = "/auth"
 tags = ["auth"]
@@ -29,11 +30,11 @@ def user_login(form_data: OAuth2PasswordRequestForm = Depends(), session:Session
     return user_login_(form_data = form_data, session=session)
 
 
-@router.get("/user/me/", response_model=UserResponse)
-async def read_users_me(current_user: UserResponse = Depends(get_current_active_user)):
-    return current_user
+# @router.get("/user/me/", response_model=UserResponse)
+# async def read_users_me(current_user: UserResponse = Depends(get_current_active_user)):
+#     return current_user
 
 
-@router.get("/user/me/items")
-async def read_own_items(current_user: UserResponse = Depends(get_current_active_user)):
-    return [{"item_id": 1, "owner": current_user}]
+# @router.get("/user/me/items")
+# async def read_own_items(current_user: UserResponse = Depends(get_current_active_user)):
+#     return [{"item_id": 1, "owner": current_user}]

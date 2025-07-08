@@ -6,8 +6,8 @@ from pydantic import BaseModel
 class TodoResponse(BaseModel):
     id: str
     title: str
-    created_at: datetime
-    is_chceked: bool
+    desription: str | None
+    priority: str
 
     class Config:
         form_attribute = True
@@ -15,6 +15,7 @@ class TodoResponse(BaseModel):
 
 class TodoCreateRequest(BaseModel):
     title: str
+    desription: str
 
 
 class TodoUpdateRequest(BaseModel):

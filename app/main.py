@@ -49,6 +49,8 @@ routes = [
 # Loop through the routes list and include routers in the FastAPI app
 for router_model in routes:
     app.include_router(
-        router_model.router
+        router_model.router,
+        prefix=router_model.prefix, tags=router_model.tags
+        
     )
     

@@ -26,6 +26,14 @@ class BaseConfig(BaseSettings):
     APP_TZ: str = "Asia/Riyadh"
 
     FORWARDED_ALLOW_IPS: str = "*"
+    CELERY_RESULT_BACKEND: str | None = None
+    CELERY_BROKER_URL: str | None = None
+    ENABLE_CELERY_RETRY: bool = True
+    ENABLE_CELERY_RETRY_BACKOFF: bool = True
+    CELERY_RETRY_MAX: int = 10
+    CELERY_RETRY_BACKOFF_MAX: int = 3600
+    CELERY_ENABLE_RESULT_BACKEND: bool = False
+
 
     FEATURE_FLAG_LOCAL_CACHING_TTL: int = 5
     FEATURE_FLAG_LOCAL_CASH_SIZE_LIMIT: int = 100
@@ -66,6 +74,15 @@ class BaseConfig(BaseSettings):
     ENABLE_CASHING: bool = True
     LOGGING_LEVEL: LoggingLevel = LoggingLevel.INFO
     RELEASE_SHA: str = "unknown"
+    
+    SMTP_SENDER: str | None = None
+    SMTP_SENDERNAME: str | None= None
+    SMTP_USERNAME: str | None = None
+    SMTP_PASSWORD: str | None = None
+    SMTP_HOST: str | None= None
+    SMTP_TIMEOUT: float = 60
+    SMTP_PORT: int = 587
+    SMTP_ENCRYPTION: bool = False
 
     @property
     def SQLALCHEMY_DATABASE_URL(self) -> str:

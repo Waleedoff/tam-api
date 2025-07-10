@@ -4,9 +4,8 @@ from app.api.todos.models import Todo
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
-from app.api.todos.schema import TodoCreateRequest
 
-def edit_task_(status: Status,  task_id: str, session: Session):
+def get_task_by_id_(task_id: str, session: Session):
     
     stmt = select(Todo).where(Todo.id == task_id, Todo.is_deleted != True)
     
@@ -15,5 +14,4 @@ def edit_task_(status: Status,  task_id: str, session: Session):
     if task is None:
         raise HTTPException(detail="task not found", status_code=400)
     
-    task.status = status.value
-    
+    return task

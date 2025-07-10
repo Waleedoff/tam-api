@@ -10,6 +10,10 @@ x-common-envs:
   APP_NAME: "tam"
   DB_NAME: "tam_db"
 
+  #stmp
+  SMTP_HOST: "mailhog"
+  SMTP_PORT: 1025
+  SMTP_SENDER: "local-sender"
 
 
 x-common-build-volumes:
@@ -66,6 +70,17 @@ services:
     <<: *common-build-volumes
     
 
+  mailhog:
+    image: mailhog/mailhog
+    platform: linux/amd64
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui. Visit http://localhost:8025/ to check emails
+    restart: unless-stopped
+    logging:
+      driver: none
+  
+  
   pytest:
     build: 
       dockerfile: Dockerfile
@@ -84,6 +99,8 @@ services:
     volumes:
       - ./:/app/
     command: pytest
+
+
 
 
 volumes:

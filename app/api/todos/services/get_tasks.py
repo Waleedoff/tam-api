@@ -1,19 +1,21 @@
 from fastapi import HTTPException
-from app.api.todos.enums import Priority, Status
+from app.api.auth.schema import UserResponse
 from app.api.todos.models import Todo
 from sqlalchemy.orm import Session
-from sqlalchemy import select, or_, func
+from sqlalchemy import Sequence, select, or_, func, desc
 
-def get_tasks_(q: str | None, status: Status, priority: Priority, session: Session):
+def get_tasks_(q: str | None,current_user: UserResponse, session: Session):
     
-    stmt = select(Todo).where(Todo.is_deleted != True)
+    stmt = select(Todo).where(Todo.is_deleted != True, Todo.created_by == current_user.email).order_by(
+            desc(Todo.created)
+        ) 
     
-    if status is not None:
-        stmt = stmt.where(Todo.status == status)
+    # if status is not None:
+    #     stmt = stmt.where(Todo.status == status)
         
     
-    if priority is not None:
-        stmt = stmt.where(Todo.priority == priority)
+    # if priority is not None:
+    #     stmt = stmt.where(Todo.priority == priority)
         
         
     if q is not None:
@@ -25,10 +27,10 @@ def get_tasks_(q: str | None, status: Status, priority: Priority, session: Sessi
 
         ))
         
-    task: Todo | None = session.execute(stmt).scalar_one_or_none()
+    task: Sequence[Todo]  = session.execute(stmt).scalars().all()
     
     if task is None:
-        raise HTTPException(detail="task not found", status_code=400)
+        raise HTTPException(detail="task not found", status_code=200)
     
     return task
     

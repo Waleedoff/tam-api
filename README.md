@@ -16,7 +16,7 @@ This guide explains how to set up and run the backend service using Docker.
 
 ```bash
 git clone https://github.com/waleedoff/tam-api.git
-cd your-repo-name
+cd tam-api
 
 ```
 

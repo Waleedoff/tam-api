@@ -6,14 +6,11 @@ from sqlalchemy import select
 
 from app.api.todos.schema import TodoCreateRequest
 
-def edit_task_(status: Status,  task_id: str, session: Session):
+def edit_task_attribute_(body: TodoCreateRequest,  task_id: str, session: Session):
     
     stmt = select(Todo).where(Todo.id == task_id, Todo.is_deleted != True)
     
     task: Todo | None = session.execute(stmt).scalar_one_or_none()
     
-    if task is None:
-        raise HTTPException(detail="task not found", status_code=400)
-    
-    task.status = status.value
+    task.update_attributes(body.model_dump())
     

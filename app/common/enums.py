@@ -33,3 +33,7 @@ class LoggingLevel(str, BaseEnum):
     INFO = "INFO"
     DEBUG = "DEBUG"
     NOTSET = "NOTSET"
+    
+
+class EmailTemplate(str, BaseEnum):
+    COMPLETED_TASK = "completed_task.html"

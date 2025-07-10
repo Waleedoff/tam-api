@@ -1,8 +1,6 @@
 version: "3.9"
 
-
-x-common-envs:
-  &common-envs
+x-common-envs: &common-envs
   DB_HOST: "db"
   DB_USER: "postgres"
   DB_PASSWORD: "dsadsa"
@@ -10,14 +8,20 @@ x-common-envs:
   APP_NAME: "tam"
   DB_NAME: "tam_db"
 
-  #stmp
+  # SMTP
   SMTP_HOST: "mailhog"
   SMTP_PORT: 1025
   SMTP_SENDER: "local-sender"
 
+  CELERY_BROKER_URL: "redis://redis:6379/0"
 
-x-common-build-volumes:
-  &common-build-volumes
+  # Redis
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
+  REDIS_DB: 0
+  REDIS_LOCAL_CASHING_TTL: 0
+
+x-common-build-volumes: &common-build-volumes
   build:
     context: .
     dockerfile: "./Dockerfile"
@@ -28,18 +32,21 @@ x-common-build-volumes:
 
 services:
   db:
+    image: postgres
     ports:
       - "5440:5432"
-    image: postgres
     volumes:
       - postgres:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: dsadsa 
+      POSTGRES_PASSWORD: dsadsa
 
-  
   pgadmin:
-    restart: unless-stopped
     image: dpage/pgadmin4
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "5052:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: root
@@ -47,44 +54,56 @@ services:
       - ./.pgadmin:/root/.pgadmin
     links:
       - db
+
+  redis:
+    image: redis
     ports:
-      - "5052:80"
-    depends_on:
-      - db
-  
+      - "6380:6379"
 
-  api:
-    restart: unless-stopped
-    depends_on:
-      - db
-      - pgadmin
-    build: 
-      context: .
-      dockerfile: Dockerfile
-      target: production
-
+  redis-commander:
+    image: rediscommander/redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
     ports:
-      - "3002:80"
-
-    command: /start-reload.sh
-    <<: *common-build-volumes
-    
+      - "8081:8081"
 
   mailhog:
     image: mailhog/mailhog
     platform: linux/amd64
     ports:
-      - 1025:1025 # smtp server
-      - 8025:8025 # web ui. Visit http://localhost:8025/ to check emails
-    restart: unless-stopped
-    logging:
-      driver: none
-  
-  
-  pytest:
-    build: 
-      dockerfile: Dockerfile
+      - "8025:8025"
+
+  celery:
+    build:
       context: .
+      dockerfile: Dockerfile
+      target: production
+    command: celery -A src.worker worker --loglevel=info
+    depends_on:
+      - redis
+      - db
+    <<: *common-build-volumes
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    restart: unless-stopped
+    depends_on:
+      - db
+      - pgadmin
+      - celery
+      - mailhog
+    ports:
+      - "3002:80"
+    command: /start-reload.sh
+    <<: *common-build-volumes
+
+  pytest:
+    build:
+      context: .
+      dockerfile: Dockerfile
       target: dev
     depends_on:
       - db
@@ -99,9 +118,6 @@ services:
     volumes:
       - ./:/app/
     command: pytest
-
-
-
 
 volumes:
   postgres:

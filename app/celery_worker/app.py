@@ -12,6 +12,7 @@ from app.common.logging import logging
 from app.common.redis_client import RedisClient, get_redis_client
 from app.config import BaseConfig
 from app.db.db import BaseDb
+# from app.dependencies import get_feature_flags_dependency
 
 
 def stop_http_errors(func):
@@ -51,6 +52,7 @@ def init_app(config: BaseConfig):
         backend=backend if config.CELERY_ENABLE_RESULT_BACKEND else None,
         borker=config.CELERY_BROKER_URL,
     )
+    # get_feature_flags = get_feature_flags_dependency(config, base_db)
 
     class FullCustomTask(CustomTask):
         _session: Session | None = None
@@ -75,9 +77,10 @@ def init_app(config: BaseConfig):
         def app_config(self):
             return config
 
-        # @property
-        # def feature_flags(self):
-        #     return get_feature_flags()
+        @property
+        def feature_flags(self):
+            # return get_feature_flags()
+            return
 
         @property
         def session(self):
@@ -126,7 +129,7 @@ def init_app(config: BaseConfig):
     client.Task = FullCustomTask
     client.conf["task_always_eager"] = config.testing
     # if not config.testing:
-    #     # from app.common.set_up_sentry import set_up_sentry
-    #     # set_up_sentry(config)
+    #     from app.common.set_up_sentry import set_up_sentry
+    #     set_up_sentry(config)
 
-    # return client
+    return client

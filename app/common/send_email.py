@@ -20,5 +20,5 @@ def send_email(
     password = self.app_config.SMTP_PASSWORD
     if username is not None and password is not None:
         server.login(username, password)
-    # server.sendmail(self.app_config.SMTP_SENDER, user_email, message.as_string())
+    server.sendmail(self.app_config.SMTP_SENDER, user_email, message.as_string())
     server.close()

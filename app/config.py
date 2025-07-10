@@ -33,6 +33,16 @@ class BaseConfig(BaseSettings):
     CELERY_RETRY_MAX: int = 10
     CELERY_RETRY_BACKOFF_MAX: int = 3600
     CELERY_ENABLE_RESULT_BACKEND: bool = False
+    
+    REDIS_HOST: str | None = None
+    REDIS_PORT: int | None = None
+    REDIS_DB: int | None = None
+    REDIS_CASHING_TTL: int = 3600
+    REDIS_LOCAL_CASHING_TTL: int = 2
+    REDIS_LOCAL_CASH_SIZE_LIMIT: int = 1000
+    REDIS_TIMEOUT: int = 500
+    REDIS_CONNECTION_POOL_SIZE: int = 20
+    REDIS_SOCKET_KEEPALIVE: bool = True
 
 
     FEATURE_FLAG_LOCAL_CACHING_TTL: int = 5

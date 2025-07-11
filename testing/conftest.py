@@ -1,8 +1,8 @@
 import os
+
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import column, select, table, insert
-from sqlalchemy.orm import scoped_session, Session
+from sqlalchemy.orm import scoped_session
 from sqlalchemy_utils import create_database, drop_database
 
 from app.celery_worker.tasks import celery
@@ -70,8 +70,11 @@ def session():
 
 
 @pytest.fixture(scope="session")
-def client() -> TestClient:
-    from app.dependencies import get_db_session, get_db_read_session
+def client() -> TestClient:  # type: ignore
+    from app.dependencies import get_db_read_session, get_db_session
+
+    app.dependency_overrides[get_db_session] = get_db_session_overwrite
+    app.dependency_overrides[get_db_read_session] = get_db_session_overwrite
 
     try:
         create_database(base_db.engine.url)
@@ -80,9 +83,6 @@ def client() -> TestClient:
 
     os.system("alembic upgrade head")
     celery.Task = get_celery_test_task()
-
-    app.dependency_overrides[get_db_session] = get_db_session_overwrite
-    app.dependency_overrides[get_db_read_session] = get_db_session_overwrite
 
     yield TestClient(app=app)
 

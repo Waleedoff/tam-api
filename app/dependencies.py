@@ -1,5 +1,4 @@
 from threading import Lock
-from collections.abc import Callable
 
 from cachetools import TTLCache, cached
 from cachetools.keys import hashkey
@@ -8,8 +7,9 @@ from sqlalchemy import column, table
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select
 
-from app.db.db import BaseDb
+from app.common.redis_client import get_redis_client
 from app.config import BaseConfig, config
+from app.db.db import BaseDb
 
 db = BaseDb(config)
 
@@ -28,7 +28,6 @@ def get_db_session_dependency(SessionLocal):
 
 
 # --- Redis Client Dependency ---
-from app.common.redis_client import get_redis_client
 
 
 def get_redis_dependency(config: BaseConfig):

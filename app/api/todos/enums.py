@@ -1,11 +1,10 @@
 from enum import Enum
-from typing import Collection
 
 
 class BaseEnum(Enum):
     def __str__(self):
         return self.value
-    
+
 
 
 

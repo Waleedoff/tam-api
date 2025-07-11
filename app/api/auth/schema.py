@@ -9,10 +9,10 @@ class CreateUserRequest(BaseModel):
 
 
 class UserLoginRequest(BaseModel):
-    
+
     username: str
-    password: str 
-    
+    password: str
+
 
 
 class Token(BaseModel):

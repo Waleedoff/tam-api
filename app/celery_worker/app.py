@@ -12,6 +12,7 @@ from app.common.logging import logging
 from app.common.redis_client import RedisClient, get_redis_client
 from app.config import BaseConfig
 from app.db.db import BaseDb
+
 # from app.dependencies import get_feature_flags_dependency
 
 

@@ -1,12 +1,14 @@
 import os
 import time
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
+
 from app.api.auth import routes as auth_router
 from app.api.todos import routes as todo_router
 from app.config import config
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 # Set the timezone based on the app configuration
 os.environ["TZ"] = config.APP_TZ
@@ -51,6 +53,6 @@ for router_model in routes:
     app.include_router(
         router_model.router,
         prefix=router_model.prefix, tags=router_model.tags
-        
+
     )
-    
+

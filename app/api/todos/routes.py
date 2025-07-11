@@ -1,11 +1,12 @@
 
 from app.api.todos.services.edit_task_attribute import edit_task_attribute_
 from app.api.todos.services.get_task_by_id import get_task_by_id_
+from app.api.todos.services.get_task_statistics import get_tasks_statistics_
 from fastapi import APIRouter
 from app.api.auth.schema import UserResponse
 from app.api.auth.services.authSetup import get_current_active_user
 from app.api.todos.enums import Priority, Status
-from app.api.todos.schema import TodoCreateRequest, TodoResponse
+from app.api.todos.schema import TaskStatistics, TodoCreateRequest, TodoResponse
 from app.api.todos.services.create_task import create_task_
 from app.api.todos.services.delete_task import delete_task_
 from app.api.todos.services.edit_task import edit_task_
@@ -22,9 +23,13 @@ router = APIRouter(route_class=ValidationErrorLoggingRoute)
 prefix = "/task"
 tags=['task']  
 
-@router.get("")
+
+@router.get('/statistics')
+def get_tasks_statistics(session: Session = db_session, current_user: UserResponse = Depends(get_current_active_user))-> TaskStatistics:
+    return get_tasks_statistics_(session=session, current_user=current_user)
 
 
+@router.get('')
 def get_taks(q: str | None = None,  session: Session = db_session, current_user: UserResponse = Depends(get_current_active_user))-> list[TodoResponse]:
     return get_tasks_(q=q, session=session, current_user=current_user)
 
@@ -58,3 +63,6 @@ def get_task_by_id(task_id: str, session: Session = db_session):
 def edit_task_attribute(body: TodoCreateRequest, task_id: str, session: Session = db_session):
     
     return edit_task_attribute_(body = body, task_id = task_id, session=session)
+
+
+

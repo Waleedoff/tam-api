@@ -77,47 +77,49 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
-    command: celery -A src.worker worker --loglevel=info
+    command: watchmedo auto-restart -p="*.py" -R celery -- -A app.celery_worker.tasks worker --loglevel=info
     depends_on:
       - redis
       - db
+    <<: *common-build-volumes
+
+  celery-beat:
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - db
+    # command: "celery -A app.celery_worker.beat beat --loglevel=info"
     <<: *common-build-volumes
 
   api:
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
     restart: unless-stopped
     depends_on:
       - db
       - pgadmin
       - celery
+      - celery-beat
+      - redis-commander
       - mailhog
     ports:
       - "3002:80"
     command: /start-reload.sh
     <<: *common-build-volumes
 
-  pytest:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: dev
+  tam-pytest:
     depends_on:
       - db
-    environment:
-      - APP_NAME=todo
-      - DB_NAME=todo_test
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_USER=admin
-      - DB_PASSWORD=dsadsa
-      - ENVIRONMENT=testing
-    volumes:
-      - ./:/app/
+      - redis
+      - mailhog
     command: pytest
+    <<: *common-build-volumes
+    environment:
+      <<: *common-envs
+      ENVIRONMENT: "testing"
+      DB_NAME: "tam_testing"
+      CELERY_BROKER_URL: redis://redis:6379/2
 
 volumes:
   postgres:

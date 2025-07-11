@@ -1,5 +1,3 @@
-from email.mime.image import MIMEImage
-from io import BytesIO
 from uuid import uuid4
 
 # import qrcode

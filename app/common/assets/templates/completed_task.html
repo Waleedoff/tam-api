@@ -1,44 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Task Completed</title>
+  <meta charset="UTF-8" />
+  <title>New Task Created</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       margin: 0;
       padding: 0;
       background-color: #2a2656;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .content {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
+      padding: 30px 20px;
       text-align: center;
-      color: #ffffff;
     }
 
-    img {
-      width: 200px;
-      max-width: 80%;
-      margin-bottom: 30px;
+    .logo {
+      max-width: 140px;
+      margin-bottom: 20px;
     }
 
     h1 {
-      font-size: 2.5rem;
+      font-size: 22px;
       margin-bottom: 10px;
     }
 
     p {
-      font-size: 1.2rem;
+      font-size: 15px;
+      line-height: 1.5;
       color: #d1d1ff;
+      margin: 8px 0;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .footer {
+      background-color: #f3f4f6;
+      color: #444;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      max-width: 90px;
+      margin-bottom: 10px;
+    }
+
+    .footer p {
+      font-size: 13px;
+      margin: 6px 0;
+    }
+
+    .social-icons img {
+      width: 24px;
+      margin: 0 8px;
+    }
+
+    @media only screen and (max-width: 480px) {
+      .content {
+        padding: 25px 15px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+
+      .footer {
+        font-size: 12px;
+      }
+
+      .social-icons img {
+        width: 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <img src="https://tam.sa/_next/image?url=https%3A%2F%2Fcore.tam.sa%2Fwp-content%2Fuploads%2F2025%2F01%2Ftam_logo-1.png&w=256&q=75" alt="TAM Logo">
-  <h1>🎉 Congratulations, {{recipient_name}}!</h1>
-  <p>You’ve successfully completed the task: <strong>{{task_title}}</strong>.</p>
-  <p>Great work – keep going!</p>
+  <!-- Email Body -->
+  <div class="content">
+    <img
+      class="logo"
+      src="https://tam.sa/_next/image?url=https%3A%2F%2Fcore.tam.sa%2Fwp-content%2Fuploads%2F2025%2F01%2Ftam_logo-1.png&w=256&q=75"
+      alt="TAM Logo"
+    />
+    <h1>📝 Task Created</h1>
+    <p>Hello <span class="highlight">{{recipient_name}}</span>,</p>
+    <p>You’ve successfully created a new task:</p>
+    <p><strong>{{task_title}}</strong></p>
+    <p>Priority: <span class="highlight">{{task_priority}}</span></p>
+    <p>Status: <span class="highlight">{{task_status}}</span></p>
+    <p>Let’s get it done!</p>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <img
+      class="footer-logo"
+      src="https://tam.sa/_next/image?url=https%3A%2F%2Fcore.tam.sa%2Fwp-content%2Fuploads%2F2025%2F01%2Ftam_logo-1.png&w=256&q=75"
+      alt="TAM Footer Logo"
+    />
+    <p>Stay connected with TAM</p>
+    <div class="social-icons">
+      <a href="https://twitter.com/TAM_SA" target="_blank">
+        <img src="https://assets.thegarage.sa/emailTemplate/09ddde97-8a66-46e0-becc-c40fbd88c1f2.png" alt="Twitter" />
+      </a>
+      <a href="https://www.linkedin.com/company/tam-sa" target="_blank">
+        <img src="https://assets.thegarage.sa/emailTemplate/5608caf7-1d2d-4ff2-a650-b6d25b175eb9.png" alt="LinkedIn" />
+      </a>
+    </div>
+    <p>© {{year}} TAM Development. All rights reserved.</p>
+  </div>
 </body>
 </html>

@@ -8,11 +8,11 @@ from sqlalchemy.future.engine import create_engine
 from sqlalchemy.orm import Mapped, declarative_base, declared_attr, sessionmaker
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.pool import StaticPool
+from sqlalchemy_utils.listeners import instant_defaults_listener
 
 from app.common.enums import LoggingLevel
 from app.common.utils import generate_random_uuid
 from app.config import BaseConfig
-from sqlalchemy_utils.listeners import instant_defaults_listener
 
 DELETE_DATETIME = datetime.fromtimestamp(0)
 
@@ -30,7 +30,7 @@ def datetime_encoder(val):
 Base = declarative_base()
 
 
-class BaseDb(object):
+class BaseDb:
     def __init__(self, config: BaseConfig):
         engine_options = {
             "echo": "debug" if config.ENVIRONMENT == "staging" else False,

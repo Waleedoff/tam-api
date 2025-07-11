@@ -1,13 +1,9 @@
-from datetime import timedelta
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from app.api.auth.schema import CreateUserRequest, Token, UserLoginRequest, UserResponse
-from app.api.auth.services.authSetup import (
-    get_current_active_user,
-)
+from app.api.auth.schema import CreateUserRequest, Token, UserLoginRequest
 from app.api.auth.services.user_login import user_login_
 from app.api.auth.services.user_register import user_register_
 from app.common.schemas import ValidationErrorLoggingRoute
@@ -35,11 +31,3 @@ def user_login(body: UserLoginRequest, session:Session = db_session)->Token:
     )
 
     return user_login_(form_data = form_data, session=session)
-
-
-
-
-
-# @router.get("/user/me/items")
-# async def read_own_items(current_user: UserResponse = Depends(get_current_active_user)):
-#     return [{"item_id": 1, "owner": current_user}]

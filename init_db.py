@@ -9,17 +9,12 @@ from sqlalchemy.exc import OperationalError
 
 def create_db():
     # if database {DB_NAME} does not exist create it
-    # run migration
-
+    # establishing the connection
     reconnect = 5
     conn = None
-    # asser False, os.environ['DB_HOST']
     while True:
         try:
             print("trying to connect to db...")
-            # assert False, os.environ['DB_HOST']
-            assert False, os.environ['DB_HOST']
-
             conn = psycopg.connect(
                 user=os.environ["DB_USER"],
                 password=os.environ["DB_PASSWORD"],

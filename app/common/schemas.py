@@ -1,6 +1,6 @@
-from typing import Callable
+from collections.abc import Callable
 
-from fastapi import HTTPException,  Request, Response
+from fastapi import HTTPException, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.routing import APIRoute
 

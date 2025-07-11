@@ -22,5 +22,5 @@ def user_register_(
 
     user = User(**body.model_dump(exclude={"password"}), hashed_password=hash_password, created_by="system")
     session.add(user)
-    
+
     return {"message": "User created successfully"}

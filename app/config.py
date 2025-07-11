@@ -33,7 +33,7 @@ class BaseConfig(BaseSettings):
     CELERY_RETRY_MAX: int = 10
     CELERY_RETRY_BACKOFF_MAX: int = 3600
     CELERY_ENABLE_RESULT_BACKEND: bool = False
-    
+
     REDIS_HOST: str | None = None
     REDIS_PORT: int | None = None
     REDIS_DB: int | None = None
@@ -73,7 +73,7 @@ class BaseConfig(BaseSettings):
     DB_NAME: str
     DB_HOST: str
     DB_PORT: int
-    
+
     READ_ONLY_DB_USER: str | None = None
     READ_ONLY_DB_PASSWORD: str | None = None
     READ_ONLY_DB_NAME: str | None = None
@@ -84,7 +84,7 @@ class BaseConfig(BaseSettings):
     ENABLE_CASHING: bool = True
     LOGGING_LEVEL: LoggingLevel = LoggingLevel.INFO
     RELEASE_SHA: str = "unknown"
-    
+
     SMTP_SENDER: str | None = None
     SMTP_SENDERNAME: str = ""
     SMTP_USERNAME: str | None = None
@@ -146,7 +146,7 @@ class TestingConfig(BaseConfig):
     SQL_POOL_ENABLED: bool = False
 
 
-@lru_cache()
+@lru_cache
 def current_config(ProductionConfig, StagingConfig, TestingConfig, BaseConfig):
     """
     this will load the required config passed on STAGE env if not set it will load LocalConfig

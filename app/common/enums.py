@@ -1,5 +1,5 @@
+from collections.abc import Collection
 from enum import Enum
-from typing import Collection
 
 
 class BaseEnum(Enum):
@@ -33,7 +33,7 @@ class LoggingLevel(str, BaseEnum):
     INFO = "INFO"
     DEBUG = "DEBUG"
     NOTSET = "NOTSET"
-    
+
 
 class EmailTemplate(str, BaseEnum):
     COMPLETED_TASK = "completed_task.html"

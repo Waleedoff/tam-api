@@ -20,7 +20,7 @@ class BaseConfig(BaseSettings):
     testing: bool = False
     ENVIRONMENT: str = "default"
     default_allow_origins: list[str] = ["*"]
-    APP_NAME: str = "api"
+    APP_NAME: str = "tam-api"
     ALLOWED_HOSTS: list[str] = ["*"]
     # timezone
     APP_TZ: str = "Asia/Riyadh"
@@ -86,7 +86,7 @@ class BaseConfig(BaseSettings):
     RELEASE_SHA: str = "unknown"
     
     SMTP_SENDER: str | None = None
-    SMTP_SENDERNAME: str | None= None
+    SMTP_SENDERNAME: str = ""
     SMTP_USERNAME: str | None = None
     SMTP_PASSWORD: str | None = None
     SMTP_HOST: str | None= None

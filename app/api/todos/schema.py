@@ -23,3 +23,15 @@ class TodoCreateRequest(BaseModel):
 
 class TodoUpdateRequest(BaseModel):
     title: str
+
+
+class RecentTasks(BaseModel):
+    task: str
+    status: str
+
+class TaskStatistics(BaseModel):
+    pending_count: int
+    in_progress: int
+    completed: int
+    recent_tasks: list[RecentTasks]
+    

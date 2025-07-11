@@ -1,6 +1,3 @@
-
-
-
 from app.celery_worker.app import init_app, stop_http_errors
 from app.config import config
 

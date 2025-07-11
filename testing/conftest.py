@@ -1,8 +1,8 @@
 import os
+
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import column, select, table, insert
-from sqlalchemy.orm import Session, scoped_session
+from sqlalchemy.orm import scoped_session
 from sqlalchemy_utils import create_database, drop_database
 
 from app.celery_worker.tasks import celery
@@ -71,8 +71,8 @@ def session():
 
 @pytest.fixture(scope="session")
 def client() -> TestClient:  # type: ignore
-    from app.dependencies import get_db_session, get_db_read_session
-    
+    from app.dependencies import get_db_read_session, get_db_session
+
     app.dependency_overrides[get_db_session] = get_db_session_overwrite
     app.dependency_overrides[get_db_read_session] = get_db_session_overwrite
 

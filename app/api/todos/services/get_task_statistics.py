@@ -1,10 +1,10 @@
-from app.api.todos.enums import Status
-from fastapi import HTTPException
-from app.api.auth.schema import UserResponse
-from app.api.todos.models import Todo
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
-from sqlalchemy import select, func
-from app.api.todos.schema import TaskStatistics, RecentTasks  # Assuming these are in schema.py
+
+from app.api.auth.schema import UserResponse
+from app.api.todos.enums import Status
+from app.api.todos.models import Todo
+from app.api.todos.schema import RecentTasks, TaskStatistics  # Assuming these are in schema.py
 
 
 def get_tasks_statistics_(current_user: UserResponse, session: Session) -> TaskStatistics:
@@ -33,7 +33,6 @@ def get_tasks_statistics_(current_user: UserResponse, session: Session) -> TaskS
         )
     )
 
-    # Get recent tasks (limit to 5 or whatever you like)
     recent_stmt = select(Todo).where(
         Todo.is_deleted != True,
         Todo.created_by == current_user.email

@@ -1,7 +1,7 @@
-from datetime import datetime
+
+from pydantic import BaseModel
 
 from app.api.todos.enums import Priority
-from pydantic import BaseModel
 
 
 class TodoResponse(BaseModel):
@@ -34,4 +34,3 @@ class TaskStatistics(BaseModel):
     in_progress: int
     completed: int
     recent_tasks: list[RecentTasks]
-    

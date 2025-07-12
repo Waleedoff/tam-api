@@ -17,19 +17,4 @@ def create_task_(body: TodoCreateRequest, session: Session, current_user: UserRe
     task = Todo(**body.model_dump(),user_id=user.id, created_by=current_user.email) # TODO we'll add actual user over here.
     session.add(task)
 
-    send_email_task.apply_async(
-    kwargs=dict(
-        source_id=f"task_completed_{task.id}_{generate_random_uuid()}",
-        source_type=Todo.__name__,
-        user_email=current_user.email,  # Replace "user.email" with actual user instance
-        subject="Task Completed",
-        data_to_be_filled={
-            "recipient_name": current_user.username ,
-            "email": current_user.email,
-            "task_title": task.title,
-            "task_priority": task.priority,
-            "task_status": task.status
-        },
-        email_template=EmailTemplate.COMPLETED_TASK.value,
-    )
-)
+   

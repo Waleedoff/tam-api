@@ -1,4 +1,5 @@
 
+from datetime import datetime
 from pydantic import BaseModel
 
 from app.api.todos.enums import Priority
@@ -10,6 +11,7 @@ class TodoResponse(BaseModel):
     desription: str | None
     priority: str
     status: str
+    created: datetime
 
     class Config:
         form_attribute = True

@@ -1,6 +1,6 @@
 
 import sqlalchemy as sa
-from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import Mapped, relationship
 
 from app.common.generate_random_id_uuid import generate_random_id
 from app.db.db import Base, Defaults
@@ -14,3 +14,5 @@ class User(Base, Defaults):
     email: Mapped[str] = sa.Column(sa.String, nullable=False)
     hashed_password: Mapped[str] = sa.Column(sa.String, nullable=False)
     disabled: Mapped[bool] = sa.Column(sa.Boolean, default=False)
+    tasks = relationship("Todo", back_populates="user", cascade="all, delete-orphan")
+

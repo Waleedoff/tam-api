@@ -50,9 +50,9 @@ def delete_task(task_id: str, session: Session = db_session):
 
 
 @router.put('/{task_id}/status')
-def edit_task(task_id: str, status: Status, session: Session = db_session):
+def edit_task(task_id: str,status: Status,  current_user: UserResponse = Depends(get_current_active_user),  session: Session = db_session):
 
-    return edit_task_(status = status, task_id = task_id, session=session)
+    return edit_task_(current_user=current_user, status = status, task_id = task_id, session=session)
 
 
 

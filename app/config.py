@@ -48,7 +48,6 @@ class BaseConfig(BaseSettings):
     FEATURE_FLAG_LOCAL_CACHING_TTL: int = 5
     FEATURE_FLAG_LOCAL_CASH_SIZE_LIMIT: int = 100
 
-    FILE_EXPORT_THRESHOLD: int = 1000
 
     @property
     def allow_hosts(self):
@@ -80,6 +79,10 @@ class BaseConfig(BaseSettings):
     READ_ONLY_DB_HOST: str | None = None
     READ_ONLY_DB_PORT: int | None = None
 
+    # TODO will be removed it just for dev.
+    SECRET_KEY: str | None = "83daa0256a2289b0fb23693bf1f6034d44396675749244721a2b20e896e11662"
+    ALGORITHM: str  | None = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     ENABLE_CASHING: bool = True
     LOGGING_LEVEL: LoggingLevel = LoggingLevel.INFO

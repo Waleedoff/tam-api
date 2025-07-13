@@ -4,11 +4,11 @@ from sqlalchemy.orm import Session
 from app.api.auth.schema import UserResponse
 from app.api.todos.enums import Status
 from app.api.todos.models import Todo
-from app.api.todos.schema import RecentTasks, TaskStatistics  # Assuming these are in schema.py
+from app.api.todos.schema import RecentTasks, TaskStatistics
 
 
 def get_tasks_statistics_(current_user: UserResponse, session: Session) -> TaskStatistics:
-    # Count tasks per status
+    ''' Count tasks per status & return last five tasks'''
     pending_count = session.scalar(
         select(func.count()).select_from(Todo).where(
             Todo.status == Status.PENDING.value,

@@ -35,6 +35,7 @@ def get_taks(q: str | None = None,  session: Session = db_session,
              )-> list[TodoResponse]:
     return get_tasks_(q=q, session=session, current_user=current_user)
 
+
 @router.post('')
 def create_task(body: TodoCreateRequest, session: Session = db_session,
                 current_user: UserResponse = Depends(get_current_active_user)):
@@ -48,19 +49,16 @@ def delete_task(task_id: str, session: Session = db_session):
     return delete_task_(task_id= task_id, session=session)
 
 
-
 @router.put('/{task_id}/status')
-def edit_task(task_id: str,status: Status,  current_user: UserResponse = Depends(get_current_active_user),  session: Session = db_session):
+def edit_task(task_id: str,status: Status,  current_user: UserResponse = Depends(get_current_active_user),
+              session: Session = db_session):
 
     return edit_task_(current_user=current_user, status = status, task_id = task_id, session=session)
-
-
 
 @router.get('/{task_id}')
 def get_task_by_id(task_id: str, session: Session = db_session):
 
     return get_task_by_id_(task_id= task_id, session=session)
-
 
 @router.put('/{task_id}/edit')
 def edit_task_attribute(body: TodoCreateRequest, task_id: str, session: Session = db_session):

@@ -7,7 +7,7 @@ from app.api.todos.models import Todo
 
 
 def get_tasks_(q: str | None,current_user: UserResponse, session: Session):
-
+    '''Get all tasks belong to current user'''
     stmt = select(Todo).where(Todo.is_deleted != True, Todo.created_by == current_user.email).order_by(
             desc(Todo.created)
         )

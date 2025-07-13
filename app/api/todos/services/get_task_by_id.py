@@ -6,7 +6,7 @@ from app.api.todos.models import Todo
 
 
 def get_task_by_id_(task_id: str, session: Session):
-
+    '''get a particular task by passing their task_id'''
     stmt = select(Todo).where(Todo.id == task_id, Todo.is_deleted != True)
 
     task: Todo | None = session.execute(stmt).scalar_one_or_none()

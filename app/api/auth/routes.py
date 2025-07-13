@@ -25,7 +25,7 @@ def user_login(body: UserLoginRequest, session:Session = db_session)->Token:
     form_data = OAuth2PasswordRequestForm(
         username=body.username,
         password=body.password,
-        scope="",           # إذا كنت لا تستخدم scopes
+        scope="",
         client_id=None,
         client_secret=None,
     )

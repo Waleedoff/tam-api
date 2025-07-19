@@ -1,5 +1,6 @@
 from uuid import uuid4
-
+import hashlib
+import re
 # import qrcode
 from fastapi.responses import StreamingResponse
 from pydantic import HttpUrl
@@ -122,3 +123,19 @@ def batch(iterable, limit: int):
     length = len(iterable)
     for ndx in range(0, length, limit):
         yield iterable[ndx : min(ndx + limit, length)]
+
+
+
+
+def normalize_question(q: str) -> str:
+    # إزالة علامات الترقيم
+    q = re.sub(r'[^\w\s]', '', q)
+    # تصغير الحروف وتحويل للأحرف البسيطة
+    q = q.strip().lower()
+    # إزالة الكلمات غير المهمة (stop words - لو تحتاج)
+    return q
+
+def make_cache_key(q: str) -> str:
+    normalized = normalize_question(q)
+    hashed = hashlib.sha256(normalized.encode()).hexdigest()
+    return f"question_answer:{hashed}"

@@ -96,6 +96,7 @@ class BaseConfig(BaseSettings):
     SMTP_TIMEOUT: float = 60
     SMTP_PORT: int = 587
     SMTP_ENCRYPTION: bool = False
+    OPENAI_API_KEY: str = "REMOVED"
 
     @property
     def SQLALCHEMY_DATABASE_URL(self) -> str:

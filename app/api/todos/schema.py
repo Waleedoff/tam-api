@@ -1,6 +1,7 @@
 
 from datetime import datetime
 
+from app.api.auth.schema import UserResponse
 from pydantic import BaseModel
 
 from app.api.todos.enums import Priority
@@ -37,3 +38,18 @@ class TaskStatistics(BaseModel):
     in_progress: int
     completed: int
     recent_tasks: list[RecentTasks]
+
+
+
+
+class TodoUsersResponse(BaseModel):
+    id: str
+    title: str
+    desription: str | None
+    priority: str
+    status: str
+    created: datetime
+    user_info: UserResponse
+
+    class Config:
+        form_attribute = True

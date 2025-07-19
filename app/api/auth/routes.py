@@ -1,9 +1,10 @@
 
+from app.api.auth.services.get_members import get_memebers_
 from fastapi import APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from app.api.auth.schema import CreateUserRequest, Token, UserLoginRequest
+from app.api.auth.schema import CreateUserRequest, GetMemeberInfoResponse, Token, UserLoginRequest
 from app.api.auth.services.user_login import user_login_
 from app.api.auth.services.user_register import user_register_
 from app.common.schemas import ValidationErrorLoggingRoute
@@ -31,3 +32,8 @@ def user_login(body: UserLoginRequest, session:Session = db_session)->Token:
     )
 
     return user_login_(form_data = form_data, session=session)
+
+
+@router.get('/members')
+def get_memebers(q: str, session:Session = db_session)-> list[GetMemeberInfoResponse]:
+    return get_memebers_(q=q, session=session)

@@ -15,3 +15,8 @@ class Todo(Base, Defaults):
     is_deleted: Mapped[bool] = sa.Column(sa.Boolean, nullable=False, default=False)  # type: ignore
     user_id: Mapped[str] = sa.Column(sa.String, sa.ForeignKey('auth_user.id'), nullable=False)  # type: ignore
     user = relationship("User", back_populates="tasks")
+    
+    
+    # relation with room
+    room_id: Mapped[str] = sa.Column(sa.String, sa.ForeignKey('rooms.id'))  # العلاقة بالغرفة
+    room = relationship("Room", back_populates="tasks")

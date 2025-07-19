@@ -31,3 +31,4 @@ cachetools
 python-jose
 firebase-admin
 qrcode[pil]==7.4.2
+langchain>=0.0.208

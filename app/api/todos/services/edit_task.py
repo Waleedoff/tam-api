@@ -1,3 +1,4 @@
+from app.common.redis_client import RedisClient
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -10,7 +11,7 @@ from app.common.enums import EmailTemplate
 from app.common.generate_random_id_uuid import generate_random_uuid
 
 
-def edit_task_(current_user: UserResponse, status: Status,  task_id: str, session: Session):
+def edit_task_(redis_client: RedisClient, current_user: UserResponse, status: Status,  task_id: str, session: Session):
     '''
     Edit task status, but keep in mind if status
     changed to be completed will recieve and email
@@ -39,5 +40,7 @@ def edit_task_(current_user: UserResponse, status: Status,  task_id: str, sessio
             email_template=EmailTemplate.COMPLETED_TASK.value,
         )
     )
-
+    cache_key = f"user_tasks:{current_user.id}:all" # TODO  check if it is correct or not.
+    redis_client.clear_cache(cache_key)
+    
     task.status = status.value

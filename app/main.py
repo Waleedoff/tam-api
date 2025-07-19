@@ -5,9 +5,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
-
+from app.api.announcement import routes as  announcement_router
+from app.api.organization import routes as  organization_router
 from app.api.auth import routes as auth_router
 from app.api.todos import routes as todo_router
+from app.api.room import routes as room_user
 from app.config import config
 
 # Set the timezone based on the app configuration
@@ -45,7 +47,10 @@ app.add_middleware(
 
 routes = [
     todo_router,
-    auth_router
+    auth_router,
+    announcement_router, 
+    organization_router,
+    room_user
     # Add other routers as needed
 ]
 # Loop through the routes list and include routers in the FastAPI app

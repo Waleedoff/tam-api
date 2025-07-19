@@ -2,16 +2,29 @@ from threading import Lock
 
 from cachetools import TTLCache, cached
 from cachetools.keys import hashkey
+from app.api.auth.models import User
+from app.api.auth.schema import UserResponse
+from app.common.enums import Department, Role
 from fastapi import Depends
 from sqlalchemy import column, table
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select
-
+from fastapi import HTTPException
 from app.common.redis_client import get_redis_client
 from app.config import BaseConfig, config
 from app.db.db import BaseDb
 
 db = BaseDb(config)
+
+def get_current_user() -> User:
+    # هنا تستخرج المستخدم من التوكن
+    return User(department=Department.BUSINESS, role=Role.SPECIALIST)
+
+def get_current_user_department(user: User = Depends(get_current_user)) -> Department:
+    return user.department
+
+def get_current_user_role(user: User = Depends(get_current_user)) -> Role:
+    return user.role
 
 
 # --- DB Session Dependencies ---

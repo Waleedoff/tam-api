@@ -7,7 +7,7 @@ x-common-envs: &common-envs
   DB_PORT: 5432
   APP_NAME: "tam"
   DB_NAME: "tam_db"
-
+  
   # SMTP
   SMTP_HOST: "mailhog"
   SMTP_PORT: 1025
@@ -106,6 +106,8 @@ services:
     ports:
       - "3002:80"
     command: /start-reload.sh
+    env_file:
+      - .env
     <<: *common-build-volumes
 
   tam-pytest:

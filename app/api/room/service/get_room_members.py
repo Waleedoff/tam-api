@@ -26,6 +26,7 @@ def get_room_members_(room_id: str, session: Session, current_user: UserResponse
             role=user.role,
             email=user.email,
             gender=user.gender,
+            is_online=user.is_online
         )
         for user in room.members
     ]

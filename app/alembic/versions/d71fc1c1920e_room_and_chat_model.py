@@ -1,8 +1,8 @@
-"""room model
+"""room and chat model
 
-Revision ID: a4edade28e67
+Revision ID: d71fc1c1920e
 Revises: b137ee62da16
-Create Date: 2025-07-30 14:08:08.619715
+Create Date: 2025-07-31 05:54:01.420925
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'a4edade28e67'
+revision: str = 'd71fc1c1920e'
 down_revision: Union[str, None] = 'b137ee62da16'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -35,6 +35,19 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_rooms_created_by'), 'rooms', ['created_by'], unique=False)
+    op.create_table('messages',
+    sa.Column('content', sa.String(), nullable=False),
+    sa.Column('room_id', sa.String(), nullable=False),
+    sa.Column('user_id', sa.String(), nullable=False),
+    sa.Column('id', sa.String(), nullable=False),
+    sa.Column('created_by', sa.String(), nullable=False),
+    sa.Column('created', sa.DateTime(), nullable=False),
+    sa.Column('updated', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['room_id'], ['rooms.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['auth_user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_messages_created_by'), 'messages', ['created_by'], unique=False)
     op.create_table('room_users',
     sa.Column('room_id', sa.String(), nullable=False),
     sa.Column('user_id', sa.String(), nullable=False),
@@ -52,6 +65,8 @@ def downgrade() -> None:
     op.drop_constraint(None, 'todos', type_='foreignkey')
     op.drop_column('todos', 'room_id')
     op.drop_table('room_users')
+    op.drop_index(op.f('ix_messages_created_by'), table_name='messages')
+    op.drop_table('messages')
     op.drop_index(op.f('ix_rooms_created_by'), table_name='rooms')
     op.drop_table('rooms')
     # ### end Alembic commands ###

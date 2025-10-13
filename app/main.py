@@ -1,6 +1,5 @@
 import os
 import time
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -10,6 +9,11 @@ from app.api.organization import routes as  organization_router
 from app.api.auth import routes as auth_router
 from app.api.todos import routes as todo_router
 from app.api.room import routes as room_user
+from app.api.sprint import routes as sprint_route
+from app.api.message import routes as message_router
+from app.api.userStory import routes as userStory_router
+from core.langChain import routes as langChain_router
+
 from app.config import config
 
 # Set the timezone based on the app configuration
@@ -50,7 +54,11 @@ routes = [
     auth_router,
     announcement_router, 
     organization_router,
-    room_user
+    room_user,
+    message_router,
+    sprint_route,
+    userStory_router,
+    langChain_router
     # Add other routers as needed
 ]
 # Loop through the routes list and include routers in the FastAPI app

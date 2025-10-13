@@ -26,6 +26,7 @@ def get_room_tasks_(room_id: str, session: Session, current_user: UserResponse):
             user_info=
                 UserResponse(
                     id=task.user.id,
+                    email=task.user.email,
                     username=task.user.username,
                     full_name=task.user.full_name,
                     department=task.user.department,

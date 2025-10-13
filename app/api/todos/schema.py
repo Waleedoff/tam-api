@@ -14,6 +14,7 @@ class TodoResponse(BaseModel):
     priority: str
     status: str
     created: datetime
+    sprint_id: str | None 
 
     class Config:
         form_attribute = True

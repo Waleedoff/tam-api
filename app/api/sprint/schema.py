@@ -4,23 +4,23 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
-class CreateRoomReques(BaseModel):
+class CreateSprintRequest(BaseModel):
+  
     name: str
     description: str | None
-    priority: str
+    # priority: str
     status: str
-    product_owner_id: str
-    members: list[str] # list of ids
-    sprint_length_days: int
+    start_date: datetime
+    end_date: datetime
 
     class Config:
         form_attribute = True
 
 
-class RoomPreviewResponse(BaseModel):
+class SprintPreviewResponse(BaseModel):
     id: str
     name: str
     status: str
-    priority: str
+    # priority: str
     created: datetime
     

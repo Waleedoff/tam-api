@@ -62,11 +62,11 @@ def get_tasks_statistics(session: Session = db_session,
     return get_tasks_statistics_(session=session, current_user=current_user)
 
 
-@router.get('')
-def get_taks(q: str | None = None,  session: Session = db_session, redis_client: RedisClient = redis_client,
+@router.get('/{user_story_id}')
+def get_taks(user_story_id: str, q: str | None = None,  session: Session = db_session, redis_client: RedisClient = redis_client,
              current_user: UserResponse = Depends(get_current_active_user)
              )-> list[TodoResponse]:
-    return get_tasks_(q=q, redis_client=redis_client, session=session, current_user=current_user)
+    return get_tasks_(user_story_id=user_story_id,  q=q, redis_client=redis_client, session=session, current_user=current_user)
 
 
 @router.get('/workspace')
@@ -77,10 +77,10 @@ def get_all_taks(q: str | None = None,  session: Session = db_session)-> list[To
 
 
 @router.post('')
-def create_task(body: TodoCreateRequest, session: Session = db_session,
+def create_task(room_id: str, body: TodoCreateRequest,sprint_id: str | None, user_story_id: str| None = None, session: Session = db_session,
                 current_user: UserResponse = Depends(get_current_active_user)):
 
-    return create_task_(current_user=current_user, body= body, session=session)
+    return create_task_(room_id=room_id, sprint_id=sprint_id, user_story=user_story_id , current_user=current_user, body= body, session=session)
 
 
 @router.put('/{task_id}')
@@ -97,7 +97,6 @@ def edit_task(task_id: str,status: Status, redis_client: RedisClient = redis_cli
 
 @router.get('/{task_id}')
 def get_task_by_id(task_id: str, session: Session = db_session):
-
     return get_task_by_id_(task_id= task_id, session=session)
 
 @router.put('/{task_id}/edit')

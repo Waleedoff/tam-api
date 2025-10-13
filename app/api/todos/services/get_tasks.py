@@ -6,17 +6,13 @@ from sqlalchemy.orm import Session
 
 from app.api.auth.schema import UserResponse
 from app.api.todos.models import Todo
-def get_tasks_(q: str | None, redis_client: RedisClient, current_user: UserResponse, session: Session):
+def get_tasks_(user_story_id: str, q: str | None, redis_client: RedisClient, current_user: UserResponse, session: Session):
     '''Get all tasks belong to current user'''
-    cache_key = f"user_tasks:{current_user.id}:{q or 'all'}"
     
-    if cached := redis_client.get_data(cache_key):
-        print('take it from cache\n')
-        return cached  # Return cached tasks
 
     stmt = select(Todo).where(
         Todo.is_deleted != True,
-        Todo.created_by == current_user.email
+        Todo.user_story_id == user_story_id
     ).order_by(desc(Todo.created))
 
     if q is not None:
@@ -28,10 +24,7 @@ def get_tasks_(q: str | None, redis_client: RedisClient, current_user: UserRespo
         )
 
     task: Sequence[Todo] = session.execute(stmt).scalars().all()
+    # if not task:
+    #     raise HTTPException(detail="task not found", status_code=400)
 
-    if not task:
-        raise HTTPException(detail="task not found", status_code=200)
-    serialized_tasks = [TodoResponse.model_validate(t, from_attributes=True).model_dump() for t in task]
-
-    redis_client.cache_data(cache_key, serialized_tasks,)  # Cache for 5 minutes (optional)
     return task

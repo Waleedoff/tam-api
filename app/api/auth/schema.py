@@ -32,7 +32,7 @@ class TokenData(BaseModel):
 
 class UserResponse(BaseModel):
     id: str
-    username: str
+    username: str | None = None
     email: str | None = None
     full_name: str | None = None
     disabled: bool | None = None
@@ -50,3 +50,4 @@ class GetMemeberInfoResponse(BaseModel):
     full_name: str
     gender: Gender
     department: Department
+    is_online: bool

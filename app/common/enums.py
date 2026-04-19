@@ -37,3 +37,27 @@ class LoggingLevel(str, BaseEnum):
 
 class EmailTemplate(str, BaseEnum):
     COMPLETED_TASK = "completed_task.html"
+
+
+class Department(str, BaseEnum): 
+    DEVOLOPER ='DEVOLOPER'
+    BUSINESS = 'BUSINESS'
+    HR = 'HR'
+    FINAINC = 'FINAINC'
+    
+
+
+
+class Role(str, BaseEnum):
+    MANAGER ='MANAGER'
+    SPECIALIST = 'SPECIALIST'
+    TRAINER = 'TRAINER'
+
+    
+    
+    
+class Gender(str, BaseEnum):
+    MALE = 'MALE'
+    FEMALE = 'FEMALE'
+    OTHER = 'OTHER'
+    

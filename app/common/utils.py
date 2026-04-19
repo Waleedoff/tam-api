@@ -1,10 +1,16 @@
 from uuid import uuid4
-
+import hashlib
+import re
+from app.api.message.models import Message
+from sqlalchemy.orm import Session
+from uuid import uuid4
+from datetime import datetime
 # import qrcode
 from fastapi.responses import StreamingResponse
 from pydantic import HttpUrl
 from sqlalchemy import func, inspect, select
 
+from app.dependencies import db_session
 # from app.common.enums import LanguageLocale
 from app.common.logging import logger
 
@@ -122,3 +128,35 @@ def batch(iterable, limit: int):
     length = len(iterable)
     for ndx in range(0, length, limit):
         yield iterable[ndx : min(ndx + limit, length)]
+
+
+
+
+def normalize_question(q: str) -> str:
+    # إزالة علامات الترقيم
+    q = re.sub(r'[^\w\s]', '', q)
+    # تصغير الحروف وتحويل للأحرف البسيطة
+    q = q.strip().lower()
+    # إزالة الكلمات غير المهمة (stop words - لو تحتاج)
+    return q
+
+def make_cache_key(q: str) -> str:
+    normalized = normalize_question(q)
+    hashed = hashlib.sha256(normalized.encode()).hexdigest()
+    return f"question_answer:{hashed}"
+
+
+
+# app/api/chat/utils.py
+
+
+async def save_message(session: Session, room_id: str, user_id: str, content: str):
+    message = Message(
+        content=content,
+        room_id=room_id,
+        user_id=user_id,
+    )
+    session.add(message)
+    session.commit()
+    session.refresh(message)
+    return message

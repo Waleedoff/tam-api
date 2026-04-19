@@ -2,16 +2,46 @@ from threading import Lock
 
 from cachetools import TTLCache, cached
 from cachetools.keys import hashkey
-from fastapi import Depends
+from app.api.auth.models import User
+from app.api.auth.schema import UserResponse
+from app.common.verify_token import verify_token
+
+from app.common.enums import Department, Role
+from fastapi import Depends, WebSocket
 from sqlalchemy import column, table
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select
-
+from fastapi import HTTPException
 from app.common.redis_client import get_redis_client
 from app.config import BaseConfig, config
 from app.db.db import BaseDb
 
+
+from fastapi import Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
+
+
 db = BaseDb(config)
+
+def get_current_user() -> User:
+    # هنا تستخرج المستخدم من التوكن
+    return User(department=Department.BUSINESS, role=Role.SPECIALIST)
+
+def get_current_user_department(user: User = Depends(get_current_user)) -> Department:
+    return user.department
+
+def get_current_user_role(user: User = Depends(get_current_user)) -> Role:
+    return user.role
+
+
+async def get_current_user_ws(websocket: WebSocket):
+    token = websocket.query_params.get("token")
+    user = verify_token(token)  # ارجع مستخدم حقيقي
+    if not user:
+        await websocket.close()
+        raise Exception("Unauthorized")
+    return user
+
 
 
 # --- DB Session Dependencies ---
@@ -25,6 +55,28 @@ def get_db_session_dependency(SessionLocal):
             session.close()
 
     return get_db_session
+
+
+
+# src/dependencies/permissions.py
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")  # مجرد placeholder
+
+def role_required(*allowed_roles: str):
+    def dependency(token: str = Depends(oauth2_scheme)):
+        payload = verify_token(token)
+        if not payload:
+            raise HTTPException(status_code=401, detail="Invalid token")
+
+        user_role = payload.get("role")
+        if user_role not in allowed_roles:
+            raise HTTPException(status_code=403, detail="You don't have access")
+
+        return payload  # يمكنك إعادة الـ payload لاستخدامها في الـ endpoint نفسه
+
+    return Depends(dependency)
+
+
 
 
 # --- Redis Client Dependency ---

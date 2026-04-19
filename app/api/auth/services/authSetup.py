@@ -52,7 +52,7 @@ def get_user(username: str, session: Session):
 
 
 def authenticate_user(username: str, password: str, session: Session):
-    user = get_user(username=username, session=session)
+    user = get_user(username=username, session=session) # TODO THIS IS WILL RETURN MORE THAN ONE.
     if not user:
         return False
     if not verify_password(password, user.hashed_password):

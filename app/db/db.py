@@ -1,6 +1,7 @@
 import json
 import re
 from datetime import date, datetime, time
+from uuid import uuid4
 
 from sqlalchemy import Column, DateTime, String, inspect
 from sqlalchemy.event import listen
@@ -11,8 +12,11 @@ from sqlalchemy.pool import StaticPool
 from sqlalchemy_utils.listeners import instant_defaults_listener
 
 from app.common.enums import LoggingLevel
-from app.common.utils import generate_random_uuid
 from app.config import BaseConfig
+
+
+def generate_random_uuid():
+    return str(uuid4())
 
 DELETE_DATETIME = datetime.fromtimestamp(0)
 
@@ -74,11 +78,12 @@ class Defaults:
     3. ids (id) a random uuid
     4. created_by
     """
-
+    
     __override_tablename__: str | None = None
 
     @declared_attr
     def __tablename__(cls):
+
         if cls.__override_tablename__ is not None:
             return cls.__override_tablename__
         return re.sub(r"(?<!^)(?=[A-Z])", "_", cls.__name__).lower() + "s"  # type: ignore[attr-defined]

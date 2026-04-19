@@ -11,9 +11,11 @@ from app.api.todos import routes as todo_router
 from app.api.room import routes as room_user
 from app.api.sprint import routes as sprint_route
 from app.api.message import routes as message_router
+from app.api.goal import routes as goal_router
 from app.api.userStory import routes as userStory_router
 from core.langChain import routes as langChain_router
-
+from app.api.brd import routes as brd_router
+from app.api.backlog import routes as backlog_router
 from app.config import config
 
 # Set the timezone based on the app configuration
@@ -58,7 +60,10 @@ routes = [
     message_router,
     sprint_route,
     userStory_router,
-    langChain_router
+    langChain_router,
+    goal_router,
+    brd_router,
+    backlog_router
     # Add other routers as needed
 ]
 # Loop through the routes list and include routers in the FastAPI app

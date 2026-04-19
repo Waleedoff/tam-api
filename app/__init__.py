@@ -7,7 +7,10 @@ APP_MODELS = [
     "app.api.organization.models",
     "app.api.announcement.models", 
     "app.api.room.model",
-    "app.api.message.models"
+    "app.api.message.models",
+    "app.api.goal.models",
+    "app.api.brd.models",
+    "app.api.backlog.model"
 
 ]
 

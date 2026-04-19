@@ -47,3 +47,15 @@ class WorkItemType(str, Enum):
     STORY = 'STORY'
     BUG = 'BUG'
     SPIK = 'SPIK'
+
+class UserStoryStatus(str, Enum):
+    STARTED = 'STARTED'
+    NOT_STARTED = 'NOT_STARTED'
+    IN_PROGRESS = 'IN_PROGRESS'
+    READY = 'READY'
+    DONE = 'DONE'
+
+class SprintStatus(str, Enum):
+    ACTIVE = 'ACTIVE'
+    PLANNED = 'PLANNED'
+    COMPLETED = 'COMPLETED'

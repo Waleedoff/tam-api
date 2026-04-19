@@ -1,6 +1,7 @@
-from app.api.sprint.schema import CreateSprintRequest, SprintPreviewResponse
+from app.api.sprint.schema import CreateSprintRequest, SprintOverviewResponse, SprintPreviewResponse
 from app.api.sprint.service.create_sprint import create_sprint_
-from app.api.sprint.service.get_sprints import get_sprints_
+from app.api.sprint.service.get_current_sprints import get_current_sprints_and_their_user_stories_
+from app.api.sprint.service.get_sprints_exception_active import get_sprints_exception_active_
 from fastapi import APIRouter, Depends
 
 from app.api.auth.schema import GetMemeberInfoResponse, UserResponse
@@ -14,18 +15,19 @@ router = APIRouter(route_class=ValidationErrorLoggingRoute)
 prefix = "/sprint"
 tags=['sprint']
 
-@router.post('/{room_id}')
-def create_sprint(room_id: str, body: CreateSprintRequest, current_user: UserResponse = Depends(get_current_active_user), session:Session = db_session):
-    return create_sprint_(room_id=room_id, body=body, session=session, current_user=current_user)
+@router.post('/')
+def create_sprint( body: CreateSprintRequest, current_user: UserResponse = Depends(get_current_active_user), session:Session = db_session):
+    return create_sprint_(body=body, session=session, current_user=current_user)
 
-
-
+@router.get('/overview', response_model=SprintOverviewResponse)
+def get_sprints_exception_active(session: Session = db_session):
+    return get_sprints_exception_active_(session=session)
 
 
 # TODO return it in the schema response 
-@router.get('/{room_id}')
-def get_sprints(room_id: str,  current_user: UserResponse = Depends(get_current_active_user), session:Session = db_session)-> list[SprintPreviewResponse]:
-    return get_sprints_(room_id=room_id, session=session, current_user=current_user)
+@router.get('/active')
+def get_current_sprints_and_their_user_stories( session:Session = db_session)-> list[SprintPreviewResponse]:
+    return get_current_sprints_and_their_user_stories_( session=session)
 
 
 

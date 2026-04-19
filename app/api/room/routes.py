@@ -1,5 +1,3 @@
-from app.api.room.service.create_new_task import create_new_task_
-from app.api.room.service.get_my_product_owner_rooms import get_my_product_owner_rooms_
 from fastapi import APIRouter, Depends
 
 from app.api.auth.schema import GetMemeberInfoResponse, UserResponse
@@ -20,6 +18,8 @@ router = APIRouter(route_class=ValidationErrorLoggingRoute)
 
 prefix = "/room"
 tags=['room']
+
+
 
 @router.post('/')
 def create_room(body: CreateRoomReques, current_user: UserResponse = Depends(get_current_active_user), session:Session = db_session):
@@ -55,9 +55,6 @@ def get_room_members(room_id: str, session: Session = db_session, current_user: 
 
 
 
-@router.post('/tasks/{room_id}')
-def create_new_task(room_id: str, body: TodoCreateRequest, session: Session = db_session, current_user: UserResponse = Depends(get_current_active_user)):
-    return create_new_task_(room_id=room_id, body=body, session=session, current_user=current_user)
 
 @router.get("/tasks/{room_id}")
 def get_room_tasks(room_id: str, session: Session = db_session, current_user: UserResponse = Depends(get_current_active_user))-> list[TodoUsersResponse]:

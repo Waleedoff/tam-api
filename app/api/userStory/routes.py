@@ -1,9 +1,8 @@
-from app.api.sprint.schema import CreateSprintRequest, SprintPreviewResponse
 from app.api.sprint.service.create_sprint import create_sprint_
-from app.api.sprint.service.get_sprints import get_sprints_
-from app.api.userStory.schema import CreateWorkItemRequest, CreateUserStoryResponse
-from app.api.userStory.service.create_user_story import create_work_item_
+from app.api.userStory.schema import CreateUserStoryRequest, CreateUserStoryResponse
+from app.api.userStory.service.create_user_story import create_user_story_
 from app.api.userStory.service.get_backlog_list import get_backlog_list_
+from app.api.userStory.service.get_current_user_story import get_current_user_story_
 from app.api.userStory.service.get_user_story import get_user_story_
 from fastapi import APIRouter, Depends
 
@@ -15,12 +14,18 @@ from sqlalchemy.orm import Session
 
 router = APIRouter(route_class=ValidationErrorLoggingRoute)
 
-prefix = "/work_item"
-tags=['work_item']
+prefix = "/user_story"
+tags=['user_story']
 
-@router.post('/{room_id}')
-def create_work_item(room_id: str,  body: CreateWorkItemRequest, current_user: UserResponse = Depends(get_current_active_user), session:Session = db_session):
-    return create_work_item_(room_id=room_id, body=body, session=session, current_user=current_user)
+@router.post('/')
+def create_user_story(body: CreateUserStoryRequest, current_user: UserResponse = Depends(get_current_active_user), session:Session = db_session):
+    return create_user_story_( body=body, session=session, current_user=current_user)
+
+
+# TODO MAYBE NEED IT LATER.
+@router.get('/')
+def get_user_story( session:Session = db_session)-> list[CreateUserStoryResponse]:
+    return get_user_story_(session=session)
 
 
 
@@ -28,9 +33,8 @@ def create_work_item(room_id: str,  body: CreateWorkItemRequest, current_user: U
 def get_backlog_list(room_id: str, current_user: UserResponse = Depends(get_current_active_user), session: Session = db_session):
     return get_backlog_list_(room_id = room_id, current_user= current_user, session=session)
     
-    
 
-# TODO MAYBE NEED IT LATER.
-@router.get('/{room_id}/{sprint_id}')
-def get_user_story(room_id: str, sprint_id: str, current_user: UserResponse = Depends(get_current_active_user), session:Session = db_session)-> list[CreateUserStoryResponse]:
-    return get_user_story_(room_id=room_id, sprint_id=sprint_id, session=session, current_user=current_user)
+@router.get('/current_user_story')
+def get_current_user_story(session: Session = db_session, ):
+    return get_current_user_story_(session=session,)
+    

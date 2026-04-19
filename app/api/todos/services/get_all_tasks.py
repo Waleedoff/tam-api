@@ -1,16 +1,10 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import func, select,or_
+from sqlalchemy import select
 from app.api.todos.enums import Status
 from app.api.todos.models import Todo
-def get_all_tasks_(q: str, session: Session):
-    stmt = select(Todo).where(Todo.is_deleted == False)
+def get_all_tasks_( session: Session):
     
-    if q is not None:
-        stmt.where(
-            or_(
-                func.lower(Todo.title).contains(q.lower()),                
-            )
-        )
+    stmt = select(Todo)
     
     tasks = session.execute(stmt).scalars().all()
     return tasks

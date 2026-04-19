@@ -1,12 +1,8 @@
 from enum import Enum
 
-
 class BaseEnum(Enum):
     def __str__(self):
         return self.value
-
-
-
 
 class Status(str, BaseEnum):
     PENDING = 'PENDING'
@@ -15,5 +11,11 @@ class Status(str, BaseEnum):
 
 class Priority(str, BaseEnum):
     HIGH = 'HIGH'
-    MEDIUM = 'MEDIUM'
-    LOW = 'LOW'
+    MEDIUM = 'medium'
+    LOW = 'low'
+
+class TaskStatus(str, BaseEnum):
+    TODO = 'TODO'
+    IN_PROGRESS = 'IN_PROGRESS'
+    IN_REVIEW = 'IN_REVIEW'
+    DONE = 'DONE'

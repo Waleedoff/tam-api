@@ -52,7 +52,8 @@ class Role(str, BaseEnum):
     MANAGER ='MANAGER'
     SPECIALIST = 'SPECIALIST'
     TRAINER = 'TRAINER'
-
+    PRODUCT = 'product'
+    EXECUTIVE = 'executive' 
     
     
     

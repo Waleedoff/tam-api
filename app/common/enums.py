@@ -54,7 +54,7 @@ class Role(str, BaseEnum):
     TRAINER = 'TRAINER'
     PRODUCT = 'product'
     EXECUTIVE = 'executive' 
-    
+    TEST = 'TEST' 
     
     
 class Gender(str, BaseEnum):

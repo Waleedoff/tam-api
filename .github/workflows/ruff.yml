@@ -1,4 +1,4 @@
-# on: 
+# on:
 #   push
 
 # jobs:
@@ -19,4 +19,4 @@
 #           pip install ruff
 
 #       - name: Run Ruff
-#         run: ruff check --output-format=github --config=pyproject.toml --exclude "./app/alembic/*" .
+#         run: ruff check --output-format=github --config=pyproject.toml .

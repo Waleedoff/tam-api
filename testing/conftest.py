@@ -56,12 +56,11 @@ def get_db_session_overwrite():
 
 @pytest.fixture(autouse=True)
 def transaction_flag():
-    db_connection = base_db.engine.connect()
-    db_connection.begin()
-    ScopedSession(bind=db_connection)
+    session = ScopedSession()
+    session.begin_nested()
     yield
+    session.rollback()
     ScopedSession.remove()
-    db_connection.close()
 
 
 @pytest.fixture()
@@ -82,9 +81,49 @@ def client() -> TestClient:  # type: ignore
         print("⚠️ Could not create database:", e)
 
     os.system("alembic upgrade head")
+
+    from app.api.organization.models import Organization
+    with base_db.SessionLocal() as db:
+        org = Organization(
+            id="xyz",
+            name="Test Org",
+            industry="Tech",
+            subscription_plan="STARTUP",
+            is_active=True,
+            created_by="system",
+        )
+        db.add(org)
+        db.commit()
+
     celery.Task = get_celery_test_task()
 
     yield TestClient(app=app)
 
     base_db.engine.dispose()
     drop_database(base_db.engine.url)
+
+
+@pytest.fixture()
+def registered_user(client: TestClient):
+    body = {
+        "full_name": "Test User",
+        "username": "testuser",
+        "password": "testpass123",
+        "email": "test@example.com",
+        "gender": "MALE",
+        "department": "DEVOLOPER",
+        "role": "product",
+    }
+    response = client.post("/auth/register", json=body)
+    assert response.status_code == 200
+    return body
+
+
+@pytest.fixture()
+def auth_token(client: TestClient, registered_user: dict):
+    response = client.post("/auth/login", json={
+        "username": registered_user["username"],
+        "password": registered_user["password"],
+    })
+    assert response.status_code == 200
+    return response.json()["access_token"]

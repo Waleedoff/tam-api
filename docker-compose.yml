@@ -25,6 +25,7 @@ x-common-build-volumes: &common-build-volumes
   build:
     context: .
     dockerfile: "./Dockerfile"
+    target: dev
   volumes:
     - .:/app
   environment:

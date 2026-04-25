@@ -18,7 +18,7 @@ class User(Base, Defaults):
     department: Mapped[str] = sa.Column(sa.String, nullable=False)
     role: Mapped[str] = sa.Column(sa.String, nullable=False)
     is_online: Mapped[bool] = sa.Column(sa.Boolean, default=False)
-    test_rollback:  Mapped[str] = sa.Column(sa.String, nullable=False)
+    test_rollback:  Mapped[str] = sa.Column(sa.String, nullable=True)
     tasks = relationship("Todo", back_populates="user", cascade="all, delete-orphan")
     organization = relationship("Organization", back_populates="users")
     organization_id: Mapped[str] = sa.Column(sa.String, sa.ForeignKey('organizations.id'), nullable=False)

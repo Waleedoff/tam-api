@@ -6,6 +6,7 @@ passlib[bcrypt]
 python-jose[cryptography]
 black
 isort
+ruff
 
 boto3-stubs[s3]
 sqlalchemy[mypy]
@@ -29,5 +30,5 @@ pytest-cov
 asphalt
 mypy
 time-machine
-httpx
+httpx>=0.23.0,<0.28.0
 

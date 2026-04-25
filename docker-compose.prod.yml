@@ -55,7 +55,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - certbot_www:/var/www/certbot:ro
+      - /opt/tam-api/certbot/www:/var/www/certbot:ro
       - certbot_conf:/etc/letsencrypt:ro
     depends_on:
       - api
@@ -63,7 +63,7 @@ services:
   certbot:
     image: certbot/certbot
     volumes:
-      - certbot_www:/var/www/certbot
+      - /opt/tam-api/certbot/www:/var/www/certbot
       - certbot_conf:/etc/letsencrypt
 
 volumes:

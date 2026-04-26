@@ -19,7 +19,7 @@ class BaseConfig(BaseSettings):
     production: bool = False
     testing: bool = False
     ENVIRONMENT: str = "default"
-    default_allow_origins: list[str] = ["https://ruyahub.netlify.app"]
+    default_allow_origins: list[str] = ["*"]
     APP_NAME: str = "tam-api"
     ALLOWED_HOSTS: list[str] = ["*"]
     # timezone

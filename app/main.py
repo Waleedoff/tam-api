@@ -38,7 +38,7 @@ app.add_middleware(TrustedHostMiddleware, allowed_hosts=config.allow_hosts)
 # Add CORS middleware to handle Cross-Origin Resource Sharing
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow requests from all origins
+    allow_origins=[config.default_allow_origins],  # Allow requests from all origins
     allow_credentials=True,  # Allow credentials like cookies
     allow_methods=["*"],  # Allow all HTTP methods
     allow_headers=["*"],  # Allow all HTTP headers

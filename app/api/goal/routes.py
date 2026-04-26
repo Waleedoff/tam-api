@@ -17,14 +17,14 @@ router = APIRouter(route_class=ValidationErrorLoggingRoute)
 prefix = "/goal"
 tags=['goal']
 
-@router.post('/')
+@router.post('')
 def create_goal(body: CreateGoalReques, current_user: UserResponse = Depends(get_current_active_user), session:Session = db_session):
     return create_goal_(body=body, session=session, current_user=current_user)
 
 
 
 
-@router.get('/')
+@router.get('')
 def get_my_goals(current_user:UserResponse = Depends(get_current_active_user), session: Session=db_session)-> list[CreateGoalResponse]:
     return get_my_goals_(current_user=current_user, session= session)
 

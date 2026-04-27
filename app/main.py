@@ -1,5 +1,6 @@
 import os
 import time
+import sentry_sdk
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -16,11 +17,20 @@ from app.api.userStory import routes as userStory_router
 from core.langChain import routes as langChain_router
 from app.api.brd import routes as brd_router
 from app.api.backlog import routes as backlog_router
+from app.api.webhooks import routes as webhooks_router
 from app.config import config
 
 # Set the timezone based on the app configuration
 os.environ["TZ"] = config.APP_TZ
 time.tzset()
+
+if config.SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=config.SENTRY_DSN,
+        environment=config.ENVIRONMENT,
+        release=config.RELEASE_SHA,
+        traces_sample_rate=0.2,
+    )
 
 # Initialize the FastAPI app
 app = FastAPI(

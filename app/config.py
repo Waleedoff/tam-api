@@ -98,6 +98,10 @@ class BaseConfig(BaseSettings):
     SMTP_ENCRYPTION: bool = False
     OPENAI_API_KEY: str = ""
 
+    SENTRY_DSN: str | None = None
+    TELEGRAM_BOT_TOKEN: str | None = None
+    TELEGRAM_CHAT_ID: str | None = None
+
     @property
     def SQLALCHEMY_DATABASE_URL(self) -> str:
         return f"postgresql+psycopg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"

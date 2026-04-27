@@ -24,12 +24,31 @@ from app.config import config
 os.environ["TZ"] = config.APP_TZ
 time.tzset()
 
+def _sentry_before_send(event, hint):
+    try:
+        from app.api.webhooks.routes import send_telegram_message
+        level = event.get("level", "error")
+        values = event.get("exception", {}).get("values", [{}])
+        last_exc = values[-1] if values else {}
+        title = f"{last_exc.get('type', 'Error')}: {last_exc.get('value', 'Unknown error')}"
+        text = (
+            f"🚨 <b>Sentry {level.upper()}</b>\n"
+            f"<b>Env:</b> {config.ENVIRONMENT}\n"
+            f"<b>Error:</b> {title}"
+        )
+        send_telegram_message(text)
+    except Exception:
+        pass
+    return event
+
+
 if config.SENTRY_DSN:
     sentry_sdk.init(
         dsn=config.SENTRY_DSN,
         environment=config.ENVIRONMENT,
         release=config.RELEASE_SHA,
         traces_sample_rate=0.2,
+        before_send=_sentry_before_send,
     )
 
 # Initialize the FastAPI app

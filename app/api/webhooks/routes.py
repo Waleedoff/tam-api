@@ -9,16 +9,29 @@ prefix = "/webhooks"
 tags = ["webhooks"]
 
 
-def send_telegram_message(text: str) -> None:
+def send_telegram_message(text: str):
     if not config.TELEGRAM_BOT_TOKEN or not config.TELEGRAM_CHAT_ID:
-        return
+        return "missing env vars"
     url = f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/sendMessage"
-    requests.post(url, json={"chat_id": config.TELEGRAM_CHAT_ID, "text": text, "parse_mode": "HTML"}, timeout=10)
+    resp = requests.post(url, json={"chat_id": config.TELEGRAM_CHAT_ID, "text": text, "parse_mode": "HTML"}, timeout=10)
+    return resp.json()
+
+
+@router.post("/test-telegram")
+def test_telegram():
+    result = send_telegram_message("✅ TAM API Telegram test - working!")
+    return {"bot_token_set": bool(config.TELEGRAM_BOT_TOKEN), "chat_id_set": bool(config.TELEGRAM_CHAT_ID), "result": result}
 
 
 @router.post("/sentry")
 async def sentry_webhook(request: Request):
-    payload = await request.json()
+    body = await request.body()
+    if not body:
+        return {"ok": True}
+    try:
+        payload = await request.json()
+    except Exception:
+        return {"ok": True}
 
     action = payload.get("action", "")
     data = payload.get("data", {})

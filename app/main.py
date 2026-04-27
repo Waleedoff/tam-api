@@ -73,7 +73,8 @@ routes = [
     langChain_router,
     goal_router,
     brd_router,
-    backlog_router
+    backlog_router,
+    webhooks_router
     # Add other routers as needed
 ]
 # Loop through the routes list and include routers in the FastAPI app

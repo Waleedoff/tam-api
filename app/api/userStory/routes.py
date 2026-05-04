@@ -1,6 +1,7 @@
 from app.api.sprint.service.create_sprint import create_sprint_
 from app.api.userStory.schema import CreateUserStoryRequest, CreateUserStoryResponse
 from app.api.userStory.service.create_user_story import create_user_story_
+from app.api.userStory.service.fill_sprint_by_their_user_stories_ import fill_sprint_by_their_user_stories_
 from app.api.userStory.service.get_backlog_list import get_backlog_list_
 from app.api.userStory.service.get_current_user_story import get_current_user_story_
 from app.api.userStory.service.get_user_story import get_user_story_
@@ -38,3 +39,7 @@ def get_backlog_list(room_id: str, current_user: UserResponse = Depends(get_curr
 def get_current_user_story(session: Session = db_session, ):
     return get_current_user_story_(session=session,)
     
+
+@router.post('/fill_sprint_by_their_user_stories')
+def fill_sprint_by_their_user_stories(user_stories_ids: list[str],sprint_id: str, session: Session = db_session):
+    return fill_sprint_by_their_user_stories_(user_stories_ids=user_stories_ids ,sprint_id=sprint_id, session=session, )

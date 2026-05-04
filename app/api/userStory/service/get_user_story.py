@@ -10,7 +10,7 @@ def get_user_story_(session:Session):
     
 
     
-    user_story = select(UserStory)
+    user_story = select(UserStory).where(UserStory.sprint_id == None)
     story = session.execute(user_story).scalars().all()
     
     return story

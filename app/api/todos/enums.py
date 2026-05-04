@@ -11,8 +11,8 @@ class Status(str, BaseEnum):
 
 class Priority(str, BaseEnum):
     HIGH = 'HIGH'
-    MEDIUM = 'medium'
-    LOW = 'low'
+    MEDIUM = 'MEDIUM'
+    LOW = 'LOW'
 
 class TaskStatus(str, BaseEnum):
     TODO = 'TODO'

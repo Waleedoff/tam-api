@@ -9,7 +9,7 @@ class CreateBacklogRequest(BaseModel):
     type: BacklogType
     priority: Priority
     brd_id: str
-    # key_result_id: str
+    key_result_id: str
     
 
 class BacklogIdsResponse(BaseModel):

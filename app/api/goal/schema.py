@@ -53,3 +53,7 @@ class GoalResponse(BaseModel):
     # key_results: list[dict]
     class Config:
         form_attribute = True
+
+class KeyResultResponse(BaseModel):
+    id: str
+    title: str

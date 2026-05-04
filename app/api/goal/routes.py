@@ -1,4 +1,4 @@
-from app.api.goal.schema import CreateGoalReques, CreateGoalResponse, GoalResponse
+from app.api.goal.schema import CreateGoalReques, CreateGoalResponse, GoalResponse, KeyResultResponse
 from app.api.goal.services.create_goal import create_goal_
 from app.api.goal.services.get_goals_ids import get_goals_ids_
 from app.api.goal.services.get_key_results_by_id import get_key_results_by_goal_id_
@@ -37,5 +37,5 @@ def get_goals_ids( session: Session=db_session) -> list[GoalResponse]:
 
 
 @router.get('/{goal_id}')
-def get_key_results_by_goal_id(goal_id: str, session: Session = db_session,):
+def get_key_results_by_goal_id(goal_id: str, session: Session = db_session,)-> list[KeyResultResponse]:
     return get_key_results_by_goal_id_(goal_id=goal_id, session = session)

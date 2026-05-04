@@ -7,5 +7,5 @@ class BaseEnum(Enum):
 
 class BacklogType(str, BaseEnum):
     BUG = 'BUG'
-    FEAT = 'feature'
+    FEAT = 'FEATURE'
     ENC = 'ENC'
